@@ -21,10 +21,6 @@ import { SetShippingAddressOrderService } from 'src/order/domain/use-case/set-sh
 
     // j'enregistre le service directement (pas besoin de faire de useFactory)
     // pour celui là car il injecte directement le OrderRepositoryTypeOrm)
-    PayOrderService,
-    CancelOrderService,
-    SetInvoiceAddressOrderService,
-    SetShippingAddressOrderService,
     // pour pouvoir gérer l'inversion de dépendance
     // du service CreateOrderService
     // j'utilise le système de useFactory de nest
@@ -37,6 +33,34 @@ import { SetShippingAddressOrderService } from 'src/order/domain/use-case/set-sh
       },
       // en lui injectant une instance de OrderRepositoryTypeOrm
       // à la place de l'interface qui est utilisée dans le constructeur de CreateOrderService
+      inject: [OrderRepositoryTypeOrm],
+    },
+    {
+      provide: CancelOrderService,
+      useFactory: (orderRepository: OrderRepositoryInterface) => {
+        return new CancelOrderService(orderRepository);
+      },
+      inject: [OrderRepositoryTypeOrm],
+    },
+    {
+      provide: PayOrderService,
+      useFactory: (orderRepository: OrderRepositoryInterface) => {
+        return new PayOrderService(orderRepository);
+      },
+      inject: [OrderRepositoryTypeOrm],
+    },
+    {
+      provide: SetInvoiceAddressOrderService,
+      useFactory: (orderRepository: OrderRepositoryInterface) => {
+        return new SetInvoiceAddressOrderService(orderRepository);
+      },
+      inject: [OrderRepositoryTypeOrm],
+    },
+    {
+      provide: SetShippingAddressOrderService,
+      useFactory: (orderRepository: OrderRepositoryInterface) => {
+        return new SetShippingAddressOrderService(orderRepository);
+      },
       inject: [OrderRepositoryTypeOrm],
     },
   ],
