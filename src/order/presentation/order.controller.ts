@@ -5,12 +5,18 @@ import {
 } from 'src/order/domain/entity/order.entity';
 import { CreateOrderService } from 'src/order/domain/use-case/create-order.service';
 import { PayOrderService } from 'src/order/domain/use-case/pay-order.service';
+import { SetShippingAddressOrderService } from '../domain/use-case/set-shipping-address-order.service';
+import { CancelOrderService } from '../domain/use-case/cancel-order.service';
+import { SetInvoiceAddressOrderService } from '../domain/use-case/set-invoice-address-order.service';
 
 @Controller('/orders')
 export default class OrderController {
   constructor(
     private readonly createOrderService: CreateOrderService,
     private readonly payOrderService: PayOrderService,
+    private readonly setShippingAddressService: SetShippingAddressOrderService,
+    private readonly setInvoiceAddressService: SetInvoiceAddressOrderService,
+    private readonly cancelOrderService: CancelOrderService,
   ) {}
 
   @Post()
@@ -23,5 +29,28 @@ export default class OrderController {
   @Post()
   async payOrder(@Param('id') id: string): Promise<Order> {
     return await this.payOrderService.execute(id);
+  }
+
+  @Post()
+  async shippingAddress(
+    @Param('id') id: string,
+    @Body('shippingAddress') shippingAddress: string,
+  ): Promise<Order> {
+    return await this.setShippingAddressService.execute(id, shippingAddress);
+  }
+  @Post()
+  async invoiceAddress(
+    @Param('id') id: string,
+    @Body('invoiceAddress') invoiceAddress: string,
+  ): Promise<Order> {
+    return await this.setInvoiceAddressService.execute(id, invoiceAddress);
+  }
+
+  @Post()
+  async cancelOrder(
+    @Param('id') id: string,
+    @Body('cancellationReason') cancellationReason: string,
+  ): Promise<Order> {
+    return await this.cancelOrderService.execute(id, cancellationReason);
   }
 }
