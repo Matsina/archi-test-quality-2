@@ -2,7 +2,7 @@ import {
   CreateOrderCommand,
   Order,
 } from 'src/order/domain/entity/order.entity';
-import { OrderRepositoryInterface } from 'src/order/domain/port/order.repository.interface';
+import { OrderRepositoryInterface } from 'src/order/domain/port/persistence/order.repository.interface';
 
 export class CreateOrderService {
   // j'injecte l'interface dans le constructeur
