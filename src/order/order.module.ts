@@ -4,13 +4,14 @@ import OrderController from './infrastructure/presentation/order.controller';
 import { Order } from './domain/entity/order.entity';
 import { OrderItem } from './domain/entity/order-item.entity';
 import { CreateOrderService } from 'src/order/application/use-case/create-order.service';
-import { OrderRepositoryInterface } from 'src/order/domain/port/order.repository.interface';
-import OrderRepositoryTypeOrm from 'src/order/infrastructure/bdd/order.repository';
+import OrderRepositoryTypeOrm from 'src/order/infrastructure/persistence/order.repository';
 import { PayOrderService } from 'src/order/application/use-case/pay-order.service';
 import { CancelOrderService } from 'src/order/application/use-case/cancel-order.service';
 import { SetInvoiceAddressOrderService } from 'src/order/application/use-case/set-invoice-address-order.service';
 import { SetShippingAddressOrderService } from 'src/order/application/use-case/set-shipping-address-order.service';
 import { GenerateInvoiceService } from './application/use-case/generate-invoice.service';
+import { OrderRepositoryInterface } from './domain/port/persistence/order.repository.interface';
+import { PdfGeneratorServiceInterface } from './domain/port/pdf/pdf-generator.service-interface';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Order, OrderItem])],
@@ -66,8 +67,14 @@ import { GenerateInvoiceService } from './application/use-case/generate-invoice.
     },
     {
       provide: GenerateInvoiceService,
-      useFactory: (orderRepository: OrderRepositoryInterface) => {
-        return new GenerateInvoiceService(orderRepository);
+      useFactory: (
+        orderRepository: OrderRepositoryInterface,
+        PdfGeneratorInterface: PdfGeneratorServiceInterface,
+      ) => {
+        return new GenerateInvoiceService(
+          orderRepository,
+          PdfGeneratorInterface,
+        );
       },
       inject: [OrderRepositoryTypeOrm],
     },

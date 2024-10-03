@@ -196,12 +196,18 @@ export class Order {
     this.cancelReason = cancelReason;
   }
 
-  generateInvoicePdf(orderId: string) {
-    if (this.status !== OrderStatus.PAID) {
-      throw new Error(
-        "Vous ne pouvez pas générer la facture si elle n'a pas été payée",
-      );
+  getInvoiceInfos(): string {
+    if (
+      this.status !== OrderStatus.PAID &&
+      this.status !== OrderStatus.SHIPPED &&
+      this.status !== OrderStatus.DELIVERED
+    ) {
+      throw new Error('Order is not paid');
     }
-    return PdfDocument.fromHtml("");
+
+    const itemsNames = this.orderItems
+      .map((item) => item.productName)
+      .join(', ');
+    return `invoice number ${this.id}, with items: ${itemsNames}`;
   }
 }
