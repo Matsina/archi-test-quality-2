@@ -73,7 +73,7 @@ export class Order {
 
   @Column()
   @Expose({ groups: ['group_orders'] })
-   status: string;
+  status: string;
 
   @Column({ nullable: true })
   @Expose({ groups: ['group_orders'] })

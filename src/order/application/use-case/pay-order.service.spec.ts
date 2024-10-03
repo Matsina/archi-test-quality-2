@@ -8,7 +8,7 @@ class OrderRepositoryFake {
     return order;
   }
 
-  async findById(id) {
+  async findById(id: string) {
     const order = new Order({
       customerName: 'Maurice',
       items: [
