@@ -3,11 +3,11 @@ import {
   CreateOrderCommand,
   Order,
 } from 'src/order/domain/entity/order.entity';
-import { CreateOrderService } from 'src/order/domain/use-case/create-order.service';
-import { PayOrderService } from 'src/order/domain/use-case/pay-order.service';
-import { SetShippingAddressOrderService } from '../domain/use-case/set-shipping-address-order.service';
-import { CancelOrderService } from '../domain/use-case/cancel-order.service';
-import { SetInvoiceAddressOrderService } from '../domain/use-case/set-invoice-address-order.service';
+import { CreateOrderService } from 'src/order/application/use-case/create-order.service';
+import { PayOrderService } from 'src/order/application/use-case/pay-order.service';
+import { SetShippingAddressOrderService } from '../../application/use-case/set-shipping-address-order.service';
+import { CancelOrderService } from '../../application/use-case/cancel-order.service';
+import { SetInvoiceAddressOrderService } from '../../application/use-case/set-invoice-address-order.service';
 
 @Controller('/orders')
 export default class OrderController {
