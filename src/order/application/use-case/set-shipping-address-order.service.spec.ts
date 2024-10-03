@@ -28,13 +28,6 @@ class OrderRepositoryFake {
   }
 }
 
-// if (
-//     this.status !== OrderStatus.PENDING &&
-//     this.status !== OrderStatus.SHIPPING_ADDRESS_SET
-//   ) {
-//     throw new Error('Commande non payée');
-//   }
-
 const orderRepositoryFake =
   new OrderRepositoryFake() as OrderRepositoryInterface;
 
@@ -45,7 +38,7 @@ describe("L'adresse de livraison ne peut être définie si la commande n'a pas �
     );
 
     await expect(
-        shippingAddressOrderService.execute('1', 'Martin Ville'),
+      shippingAddressOrderService.execute('1', 'Martin Ville'),
     ).rejects.toThrow();
   });
 });
