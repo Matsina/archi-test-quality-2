@@ -9,6 +9,7 @@ import {
 import { Expose } from 'class-transformer';
 
 import { BadRequestException } from '@nestjs/common';
+import { PdfDocument } from '@ironsoftware/ironpdf';
 
 export interface CreateOrderCommand {
   items: ItemDetailCommand[];
@@ -85,25 +86,6 @@ export class Order {
   @Column({ nullable: true })
   @Expose({ groups: ['group_orders'] })
   private cancelReason: string | null;
-
-  // methode factory : permet de ne pas utiliser le constructor
-  // car le constructor est utilisé par typeorm
-  // public createOrder(createOrderCommand: CreateOrderCommand): Order {
-  //   this.verifyOrderCommandIsValid(createOrderCommand);
-  //   this.verifyMaxItemIsValid(createOrderCommand);
-
-  //   this.orderItems = createOrderCommand.items.map(
-  //     (item) => new OrderItem(item),
-  //   );
-
-  //   this.customerName = createOrderCommand.customerName;
-  //   this.shippingAddress = createOrderCommand.shippingAddress;
-  //   this.invoiceAddress = createOrderCommand.invoiceAddress;
-  //   this.status = OrderStatus.PENDING;
-  //   this.price = this.calculateOrderAmount(createOrderCommand.items);
-
-  //   return this;
-  // }
 
   public constructor(createOrderCommand?: CreateOrderCommand) {
     if (!createOrderCommand) {
@@ -212,5 +194,14 @@ export class Order {
     this.status = OrderStatus.CANCELED;
     this.cancelAt = new Date('NOW');
     this.cancelReason = cancelReason;
+  }
+
+  generateInvoicePdf(orderId: string) {
+    if (this.status !== OrderStatus.PAID) {
+      throw new Error(
+        "Vous ne pouvez pas générer la facture si elle n'a pas été payée",
+      );
+    }
+    return PdfDocument.fromHtml("");
   }
 }

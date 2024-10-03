@@ -10,6 +10,7 @@ import { PayOrderService } from 'src/order/application/use-case/pay-order.servic
 import { CancelOrderService } from 'src/order/application/use-case/cancel-order.service';
 import { SetInvoiceAddressOrderService } from 'src/order/application/use-case/set-invoice-address-order.service';
 import { SetShippingAddressOrderService } from 'src/order/application/use-case/set-shipping-address-order.service';
+import { GenerateInvoiceService } from './application/use-case/generate-invoice.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Order, OrderItem])],
@@ -60,6 +61,13 @@ import { SetShippingAddressOrderService } from 'src/order/application/use-case/s
       provide: SetShippingAddressOrderService,
       useFactory: (orderRepository: OrderRepositoryInterface) => {
         return new SetShippingAddressOrderService(orderRepository);
+      },
+      inject: [OrderRepositoryTypeOrm],
+    },
+    {
+      provide: GenerateInvoiceService,
+      useFactory: (orderRepository: OrderRepositoryInterface) => {
+        return new GenerateInvoiceService(orderRepository);
       },
       inject: [OrderRepositoryTypeOrm],
     },
